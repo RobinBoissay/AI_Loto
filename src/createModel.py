@@ -13,7 +13,7 @@ image_dir = "Dataset/train"
 
 # Taille des images et nombre de classes
 IMAGE_SIZE = (64, 64)
-NUM_CLASSES = 90
+NUM_CLASSES = 90 # Nombre de classes à deviner, dans notre cas 90 parce que 90 boules.
 
 # Charger les images et les étiquettes
 def load_images_and_labels(image_dir):

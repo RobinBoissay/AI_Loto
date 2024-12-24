@@ -6,7 +6,7 @@ import numpy as np
 model = load_model("image_classification_model.h5")
 
 # Charger une image de test
-image_path = "../boules/boule_43.jpg"
+image_path = "boules/boule_43.jpg"
 image = cv2.imread(image_path)
 
 # Vérifier si l'image est correctement chargée

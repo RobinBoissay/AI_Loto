@@ -45,7 +45,7 @@ def split_image_into_balls(image_path, output_dir, rows=9, cols=10):
 
 # Exemple d'utilisation
 split_image_into_balls(
-    image_path="image.png",  # Chemin vers votre image de la grille
+    image_path="imageBoules.png",  # Chemin vers votre image de la grille
     output_dir="boules",            # Dossier de sortie
     rows=9,                         # Nombre de lignes
     cols=10                         # Nombre de colonnes
