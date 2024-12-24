@@ -14,11 +14,11 @@ Ensuite, on vas générer pour chaqu'une des ces images nouvellement générer d
 
 Maintenant qu'on as toute nos données on peut crée le model d'ia, l'entrainer et le tester. Toutles fichiers pour ce faire sont dans le dossier src.
 
-Faire dans le terminal: python .\src\createModel.py
+- Faire dans le terminal: python .\src\createModel.py
 Cela vas crée le model et le stocker dans le fichier "image_classification_model.h5"
 
 Ensuite on vas pouvoir directement tester le modèle.
-Faire dans le terminal: python .\src\testOriginModel.py
+- Faire dans le terminal: python .\src\testOriginModel.py
 
 Ce script vas prédire la classe d'une images, pour choisir l'images à deviner il faut changer la ligne 9 du fichier pour choisir une autre image puis re executer le fichier.
 
