@@ -19,8 +19,10 @@ NUM_CLASSES = 90 # Nombre de classes à deviner, dans notre cas 90 parce que 90 
 def load_images_and_labels(image_dir):
     images = []
     labels = []
-    for label, class_dir in enumerate(sorted(os.listdir(image_dir))):
-        class_path = os.path.join(image_dir, class_dir)
+    class_names = sorted(os.listdir(image_dir), key=lambda x: int(x)) # Trier pour garantir un ordre constant
+    for label, class_name in enumerate(class_names):
+        print(label)
+        class_path = os.path.join(image_dir, class_name)
         if not os.path.isdir(class_path):
             continue
         for image_name in os.listdir(class_path):
@@ -31,10 +33,13 @@ def load_images_and_labels(image_dir):
             image = cv2.resize(image, IMAGE_SIZE)
             images.append(image)
             labels.append(label)
-    return np.array(images), np.array(labels)
+    return np.array(images), np.array(labels), class_names
+
 
 # Charger les données
-images, labels = load_images_and_labels(image_dir)
+images, labels, className = load_images_and_labels(image_dir)
+
+
 
 # Normaliser les pixels des images entre 0 et 1
 images = images.astype('float32') / 255.0

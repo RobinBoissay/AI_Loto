@@ -2,24 +2,25 @@ import cv2
 import numpy as np
 import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import matplotlib.pyplot as plt
 
-def generate_augmented_images(input_dir, output_dir, target_size=(32, 32), augmentations_per_image=500):
+def generate_augmented_images(input_dir, output_dir, target_size=(64, 64), augmentations_per_image=100):
     """
     Applique des augmentations à toutes les images d'un dossier et sauvegarde les résultats.
 
     :param input_dir: Dossier contenant les images originales.
     :param output_dir: Dossier de sortie pour les images augmentées.
-    :param target_size: Taille cible pour les images (par défaut 32x32).
+    :param target_size: Taille cible pour les images (par défaut 64x64).
     :param augmentations_per_image: Nombre d'images augmentées à générer par image d'entrée.
     """
     # Créer un générateur d'augmentation
     datagen = ImageDataGenerator(
-        rotation_range=20,  # Rotation aléatoire
-        width_shift_range=0.2,  # Décalage horizontal
-        height_shift_range=0.2,  # Décalage vertical
-        brightness_range=[0.8, 1.2],  # Changement de luminosité
-        zoom_range=0.2,  # Zoom aléatoire
-        horizontal_flip=False,  # Ne pas retourner horizontalement
+        rotation_range=10,            # Rotation réduite
+        width_shift_range=0.1,        # Décalage limité
+        height_shift_range=0.1,
+        brightness_range=[0.5, 1.5],# Changement subtil de luminosité
+        zoom_range=0.1,               # Zoom limité
+        horizontal_flip=False,        # Pas de retournement horizontal
         fill_mode='nearest'
     )
 
@@ -48,7 +49,16 @@ def generate_augmented_images(input_dir, output_dir, target_size=(32, 32), augme
 
         # Générer des images augmentées
         i = 0
-        for batch in datagen.flow(img, batch_size=1, save_to_dir=boule_output_dir, save_prefix=f"boule_{boule_number}", save_format="jpg"):
+        for batch in datagen.flow(img, batch_size=1, save_prefix=f"boule_{boule_number}_aug", save_format="jpg"):
+            # Clipping pour éviter les artefacts de couleurs
+            augmented_image = np.clip(batch[0], 0, 255).astype('uint8')
+
+            # Sauvegarde manuelle si nécessaire
+            save_path = os.path.join(boule_output_dir, f"aug_{i}.jpg")
+            cv2.imwrite(save_path, augmented_image)
+
+
+
             i += 1
             if i >= augmentations_per_image:
                 break
