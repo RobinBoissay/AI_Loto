@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-
+import cv2
 # Charger le modèle TFLite
 interpreter = tf.lite.Interpreter(model_path="modele_boules.tflite")
 interpreter.allocate_tensors()
@@ -12,28 +12,38 @@ output_details = interpreter.get_output_details()
 print("input details", input_details)
 
 print("output details", output_details)
-image = Image.open("../boules/boule_53.jpg").convert("RGB")  # Convertir en RGB pour enlever le canal alpha
-image = image.resize((64, 64))  # Redimensionner l'image
-image_array = np.array(image)
-noise_factor = 0.5
-image_noisy = np.array(image) + noise_factor * np.random.randn(*image_array.shape)
-image_noisy = np.clip(image_noisy, 0., 255.)
-input_data = np.array(image_noisy) / 255.0  # Normaliser entre 0 et 1
-input_data = np.expand_dims(input_data, axis=0).astype(np.float32)  # Ajouter la dimension batch
 
+image = cv2.imread("boules/boule_10.jpg")
+
+# Vérifier si l'image est correctement chargée
+if image is None:
+    print("Erreur : Impossible de charger l'image.")
+else:
+    # Redimensionner l'image
+    image_resized = cv2.resize(image, (64, 64))
+    
+    # Normaliser les pixels
+    image_normalized = image_resized.astype('float32') / 255.0
+
+    # Ajouter une dimension pour correspondre au format attendu par le modèle (lot de données)
+    image_input = np.expand_dims(image_normalized, axis=0)
+    
+# Normaliser les pixels
+image_normalized = image_resized.astype('float32') / 255.0
+
+# Ajouter une dimension pour correspondre au format attendu par le modèle (lot de données)
+image_input = np.expand_dims(image_normalized, axis=0)
 
 # Vérifier les dimensions de l'entrée
-print(f"Forme de l'entrée préparée : {input_data.shape}")  # Devrait être [1, 32, 32, 3]
+print(f"Forme de l'entrée préparée : {image_input.shape}")  # Devrait être [1, 32, 32, 3]
 
 # Effectuer une prédiction
-interpreter.set_tensor(input_details[0]['index'], input_data)
+interpreter.set_tensor(input_details[0]['index'], image_input)
 interpreter.invoke()
 output_data = interpreter.get_tensor(output_details[0]['index'])
-print(output_data)
 # Afficher la classe prédite
 predicted_class = np.argmax(output_data)
 print(f"Classe prédite : {predicted_class + 1}")
-print(predicted_class)
 
 top_5 = np.argsort(output_data[0])[-5:][::-1]
 print(f"Top 5 classes prédites : {top_5 + 1}")
