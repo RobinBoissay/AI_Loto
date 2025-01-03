@@ -8,6 +8,20 @@ from tensorflow.keras.utils import to_categorical
 import numpy as np
 import cv2
 
+
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        # Limiter à 8 Go (modifiable selon tes besoins)
+        tf.config.experimental.set_virtual_device_configuration(
+            gpus[0],
+            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=8192)]
+        )
+    except RuntimeError as e:
+        print(e)
 # Définir le chemin vers le dossier contenant les images
 image_dir = "Dataset/train"
 

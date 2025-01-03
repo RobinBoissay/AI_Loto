@@ -6,8 +6,8 @@ import os
 model = load_model("image_classification_model.h5")
 
 # Charger une image de test
-image_path = "Dataset/train/88/boule_88_0_180.jpg"
-image_path = "boules/boule_2.jpg"
+image_path = "Dataset/train/1/aug_5.jpg"
+image_path = "test/imageTest1.jpg"
 
 image = cv2.imread(image_path)
 
